@@ -25,18 +25,22 @@ function memoization(fn) {
 	if (!this.cache) {
 		this.cache = {};
 	}
+	//init cache for fn if it does not exist
+	if (!this.cache[fn]) {
+		this.cache[fn] = {};
+	}
 	return (...args) => {
 		let sortedArgs = args.slice().sort();
 
 		let cacheKey = sortedArgs.join("");
-		if (this.cache[cacheKey] == null) {
+		if (this.cache[fn][cacheKey] == null) {
 			console.log("calculated");
-			this.cache[cacheKey] = fn.apply(null, args);
+			this.cache[fn][cacheKey] = fn.apply(null, args);
 		} else {
 			console.log("from cache");
 		}
 
-		return this.cache[cacheKey];
+		return this.cache[fn][cacheKey];
 	}
 }
 
@@ -47,6 +51,8 @@ console.log(memoization(multiply)(1, 2)); // взято из кеша
 console.log(memoization(sum)(1, 3, 4));  // вычислено
 console.log(memoization(sum)(10));  // вычислено
 console.log(memoization(sum)(10));  // взято из кеша
+console.log(memoization(sum)(1, 2));  // вычислено
+console.log(memoization(sum)(1, 2));  // взято из кеша
 console.log("============LOGGER TASK 2");
 //#endregion Task 2
 
